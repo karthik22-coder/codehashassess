@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Internet 101 | Interactive Lesson</title>
+
+  <style>
+    /* Base styles */
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #080b18;
+      color: white;
+      line-height: 1.6;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    /* Header */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+
+      padding: 15px 6%;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      background: rgba(8, 11, 24, 0.9);
+      border-bottom: 1px solid #252a40;
+    }
+
+    .logo {
+      font-weight: bold;
+      color: #42e6d0;
+    }
+
+    .progress {
+      color: #aaa;
+      font-size: 14px;
+    }
+
+    /* Screens */
+
+    .screen {
+      display: none;
+      min-height: calc(100vh - 65px);
+      padding: 60px 7%;
+    }
+
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+      margin: auto;
+    }
+
+    /* Hero */
+
+    .badge {
+      display: inline-block;
+      padding: 7px 14px;
+      border: 1px solid #42e6d0;
+      border-radius: 30px;
+      color: #42e6d0;
+      margin-bottom: 20px;
+      font-size: 13px;
+    }
+
+    h1 {
+      font-size: clamp(40px, 7vw, 70px);
+      line-height: 1.05;
+      margin-bottom: 20px;
+    }
+
+    h1 span {
+      color: #42e6d0;
+    }
+
+    h2 {
+      font-size: clamp(30px, 5vw, 48px);
+      margin-bottom: 15px;
+    }
+
+    .description {
+      color: #aaa;
+      font-size: 18px;
+      max-width: 650px;
+      margin-bottom: 30px;
+    }
+
+    /* Buttons */
+
+    .btn {
+      border: none;
+      padding: 14px 24px;
+      border-radius: 30px;
+      font-weight: bold;
+      background: #42e6d0;
+      color: #061512;
+      transition: 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      filter: brightness(1.1);
+    }
+
+    .btn.secondary {
+      background: #20253a;
+      color: white;
+      margin-left: 10px;
+    }
+
+    /* Cards */
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin: 30px 0;
+    }
+
+    .card {
+      padding: 25px;
+      border-radius: 18px;
+      background: #13182b;
+      border: 1px solid #282e48;
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: #42e6d0;
+    }
+
+    .card .icon {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      color: #aaa;
+    }
+
+    /* Internet Journey */
+
+    .journey {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 40px 0;
+    }
+
+    .node {
+      padding: 18px;
+      min-width: 110px;
+      text-align: center;
+      border-radius: 15px;
+      background: #13182b;
+      border: 1px solid #343b5c;
+      transition: 0.4s;
+    }
+
+    .node.active {
+      background: #42e6d0;
+      color: #061512;
+      transform: scale(1.08);
+    }
+
+    .arrow {
+      color: #42e6d0;
+      font-size: 25px;
+    }
+
+    /* Activity */
+
+    .activity {
+      margin-top: 30px;
+      padding: 25px;
+      background: #13182b;
+      border-radius: 20px;
+      border: 1px solid #282e48;
+    }
+
+    .options {
+      display: grid;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .option {
+      padding: 15px;
+      text-align: left;
+      border-radius: 12px;
+      border: 1px solid #343b5c;
+      background: #0e1222;
+      color: white;
+    }
+
+    .option:hover {
+      border-color: #42e6d0;
+    }
+
+    .correct {
+      background: #123c2e;
+      border-color: #42e6a0;
+    }
+
+    .wrong {
+      background: #401f26;
+      border-color: #ff7777;
+    }
+
+    .feedback {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    /* Code */
+
+    .code {
+      margin: 25px 0;
+      padding: 20px;
+      border-radius: 15px;
+      background: #05070d;
+      border: 1px solid #292f47;
+      overflow-x: auto;
+    }
+
+    pre {
+      color: #42e6d0;
+      font-family: monospace;
+    }
+
+    /* Result */
+
+    .result {
+      text-align: center;
+    }
+
+    .score {
+      font-size: 70px;
+      color: #42e6d0;
+      font-weight: bold;
+      margin: 20px;
+    }
+
+
+    .quiz-question {
+      animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Mobile */
+
+    @media (max-width: 650px) {
+
+      .screen {
+        padding: 40px 20px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .journey {
+        flex-direction: column;
+      }
+
+      .arrow {
+        transform: rotate(90deg);
+      }
+
+      .btn.secondary {
+        margin-left: 0;
+        margin-top: 10px;
+      }
+
+      h1 {
+        font-size: 43px;
+      }
+    }
+    .description {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+
+  <header>
+    <div class="logo">INTERNET 101</div>
+
+    <div class="progress" id="progress">
+      Step 1 / 5
+    </div>
+  </header>
+
+
+  <!-- Screen 1 -->
+
+  <section class="screen active" id="screen1">
+
+    <div class="container">
+
+      <div class="badge">
+        🚀 INTERACTIVE TECH LESSON
+      </div>
+
+      <h1>
+        How does the
+        <span>Internet</span>
+        work?
+      </h1>
+
+      <p class="description">
+        Ever wondered what happens behind the scenes
+        when you open a website?
+      </p>
+
+      <button class="btn" onclick="nextScreen()">
+        START LEARNING →
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- Screen 2 -->
+
+  <section class="screen" id="screen2">
+
+    <div class="container">
+
+      <h2>
+        Meet the Internet Team 🌐
+      </h2>
+
+      <p class="description">
+        Different devices work together to deliver
+        a website to your screen.
+      </p>
+
+      <div class="cards">
+
+        <div class="card">
+          <div class="icon">📱</div>
+          <h3>Your Device</h3>
+          <p>
+            Your phone or computer sends a request
+            when you open a website.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="icon">📡</div>
+          <h3>Router</h3>
+          <p>
+            Your router forwards the request
+            toward the internet.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="icon">🌍</div>
+          <h3>Internet</h3>
+          <p>
+            A huge network connecting computers
+            around the world.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="icon">🖥️</div>
+          <h3>Server</h3>
+          <p>
+            A powerful computer that stores and
+            sends website information.
+          </p>
+        </div>
+
+      </div>
+
+      <button class="btn" onclick="nextScreen()">
+        SEE IT IN ACTION →
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- Screen 3 -->
+
+  <section class="screen" id="screen3">
+
+    <div class="container">
+
+      <h2>
+        Follow a Website Request 🚀
+      </h2>
+
+      <p class="description">
+        Imagine typing google.com into your browser.
+        Click the button and follow the request step by step.
+      </p>
+
+      <div class="journey">
+
+        <div class="node" id="node1">
+          📱<br>
+          Phone
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="node" id="node2">
+          📡<br>
+          Router
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="node" id="node3">
+          🔎<br>
+          DNS
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="node" id="node4">
+          🌍<br>
+          Internet
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="node" id="node5">
+          🖥️<br>
+          Server
+        </div>
+
+      </div>
+
+      <button class="btn" onclick="startJourney()">
+        SEND REQUEST 🚀
+      </button>
+
+      <p id="journeyMessage" style="margin-top:20px;color:#aaa;">
+        Click the button to begin.
+      </p>
+
+      <br>
+
+      <button class="btn secondary" onclick="nextScreen()">
+        CONTINUE →
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- Screen 4 -->
+
+  <section class="screen" id="screen4">
+
+    <div class="container">
+
+      <h2>
+        Quick Knowledge Check 
+      </h2>
+
+      <p class="description">
+        Let's see if you understood the lesson.
+      </p>
+
+      <div class="activity">
+
+        <div class="quiz-question" data-question="1">
+          <h3>1. What does a server do?</h3>
+
+          <div class="options">
+            <button class="option" onclick="checkAnswer(this, false, 1)">
+            Plays games
+            </button>
+
+            <button class="option" onclick="checkAnswer(this, false, 1)">
+            Plays music
+            </button>
+
+            <button class="option" onclick="checkAnswer(this, true, 1)">
+            Provides information to clients
+            </button>
+
+            <button class="option" onclick="checkAnswer(this, false, 1)">
+            Charges your phone
+            </button>
+          </div>
+
+          <div class="feedback" id="feedback1"></div>
+        </div>
+
+        <div class="quiz-question" data-question="2" style="display:none;">
+          <h3>2. What is the main purpose of DNS?</h3>
+
+          <div class="options">
+            <button class="option" onclick="checkAnswer(this, false, 2)">
+              Encrypts every website
+            </button>
+
+            <button class="option" onclick="checkAnswer(this, true, 2)">
+              Finds the IP address for a domain name
+            </button>
+
+            <button class="option" onclick="checkAnswer(this, false, 2)">
+              Stores your photos
+            </button>
+
+            <button class="option" onclick="checkAnswer(this, false, 2)">
+              Increases your computer speed
+            </button>
+          </div>
+
+          <div class="feedback" id="feedback2"></div>
+        </div>
+
+        <div class="quiz-question" data-question="3" style="display:none;">
+          <h3>3. What is the role of a router?</h3>
+
+          <div class="options">
+            <button class="option" onclick="checkAnswer(this, false, 3)">
+            Stores website files
+            </button>
+
+            <button class="option" onclick="checkAnswer(this, true, 3)">
+            Forwards network traffic between devices and networks
+            </button>
+
+            <button class="option" onclick="checkAnswer(this, false, 3)">
+            Designs webpages
+            </button>
+
+            <button class="option" onclick="checkAnswer(this, false, 3)">
+            Charges connected devices
+            </button>
+          </div>
+
+          <div class="feedback" id="feedback3"></div>
+        </div>
+
+      </div>
+      <br>
+
+      <button
+        class="btn"
+        id="quizNext"
+        onclick="nextScreen()"
+        disabled>
+        SEE RESULT →
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- Screen 5 -->
+
+  <section class="screen" id="screen5">
+
+    <div class="container result">
+
+      <div class="badge">
+        🎉 LESSON COMPLETE
+      </div>
+
+      <h2>
+        You made it!
+      </h2>
+
+      <div class="score">
+        <span id="finalScore">0</span>/3
+      </div>
+
+      <p class="description" id="resultMessage">
+        Great work! You now understand the basic journey
+        behind how a website reaches your device.
+      </p>
+
+      <button class="btn" onclick="restart()">
+        TRY AGAIN 🔄
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================== -->
+
+  <script>
+    let currentScreen = 1;
+    let score = 0;
+    let answeredQuestions = 0;
+
+    function showScreen(number) {
+      document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+      });
+
+      document.getElementById("screen" + number).classList.add("active");
+      document.getElementById("progress").textContent = "Step " + number + " / 5";
+
+      currentScreen = number;
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+    function nextScreen() {
+      if (currentScreen < 5) {
+        showScreen(currentScreen + 1);
+      }
+    }
+
+    function startJourney() {
+      const nodes = [
+        document.getElementById("node1"),
+        document.getElementById("node2"),
+        document.getElementById("node3"),
+        document.getElementById("node4"),
+        document.getElementById("node5")
+      ];
+
+      const message = document.getElementById("journeyMessage");
+
+      nodes.forEach(node => node.classList.remove("active"));
+      message.textContent = "Sending request... 🚀";
+
+      const messages = [
+        "Your browser sends the request.",
+        "The router forwards the request.",
+        "DNS finds the server's IP address.",
+        "The request travels through the internet.",
+        "The server receives the request and sends a response!"
+      ];
+
+      nodes.forEach((node, index) => {
+        setTimeout(() => {
+          node.classList.add("active");
+          message.textContent = messages[index];
+        }, index * 900);
+      });
+    }
+
+    function checkAnswer(button, correct, questionNumber) {
+      const question = document.querySelector(
+        '.quiz-question[data-question="' + questionNumber + '"]'
+      );
+      const options = question.querySelectorAll(".option");
+      const feedback = document.getElementById("feedback" + questionNumber);
+
+      options.forEach(option => {
+        option.disabled = true;
+      });
+
+      if (correct) {
+        button.classList.add("correct");
+        feedback.textContent = "🎉 Correct!";
+        score++;
+      } else {
+        button.classList.add("wrong");
+        feedback.textContent = "❌ Not quite. Try to remember this step.";
+      }
+
+      answeredQuestions++;
+
+      setTimeout(() => {
+        if (questionNumber < 3) {
+          question.style.display = "none";
+          document.querySelector(
+            '.quiz-question[data-question="' + (questionNumber + 1) + '"]'
+          ).style.display = "block";
+        } else {
+          document.getElementById("quizNext").disabled = false;
+          document.getElementById("quizNext").textContent = "SEE RESULT →";
+        }
+      }, 700);
+    }
+
+    function restart() {
+      score = 0;
+      answeredQuestions = 0;
+
+      document.getElementById("finalScore").textContent = score;
+
+      document.querySelectorAll(".quiz-question").forEach((question, index) => {
+        question.style.display = index === 0 ? "block" : "none";
+      });
+
+      document.querySelectorAll(".option").forEach(option => {
+        option.disabled = false;
+        option.classList.remove("correct", "wrong");
+      });
+
+      document.querySelectorAll(".feedback").forEach(feedback => {
+        feedback.textContent = "";
+      });
+
+      document.getElementById("quizNext").disabled = true;
+
+      document.querySelectorAll(".node").forEach(node => {
+        node.classList.remove("active");
+      });
+
+      document.getElementById("journeyMessage").textContent =
+        "Click the button to begin.";
+
+      showScreen(1);
+    }
+
+    document.getElementById("quizNext").addEventListener("click", function() {
+      document.getElementById("finalScore").textContent = score;
+    });
+  </script>
+
+</body>
+</html>
